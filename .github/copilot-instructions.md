@@ -1,6 +1,8 @@
 # Homework review
 
-Do not review a pull request when the head branch or the base branch is `mentor` or `mentor-branch`. Leave no comments and do not request changes. Those branches hold mentor examples and stay without homework checks.
+Do not review a pull request whose base branch is `main`, `mentor`, or `mentor-branch`. Leave no comments and do not request changes. Never suggest opening or merging a pull request into `main`.
+
+A draft pull request into `review/<student-branch>` is the review of a student who pushed without opening a pull request. Review that draft. Do not ask to merge it. A pull request whose base is the student's own branch is a review too. `mentor` and `mentor-branch` hold examples and stay without homework checks.
 
 This is a Java fundamentals course. Review only the homework in the changed files.
 

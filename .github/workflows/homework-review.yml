@@ -1,0 +1,79 @@
+name: Review homework on a student branch
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  push:
+    branches-ignore:
+      - main
+      - mentor
+      - mentor-branch
+      - "review/**"
+
+jobs:
+  review:
+    if: github.event_name != 'push' || github.event.deleted == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Ask Copilot to review the student branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -eu
+          case "$BRANCH" in
+            main|mentor|mentor-branch|review/*)
+              echo "Branch ${BRANCH} is not a student homework branch."
+              exit 0
+              ;;
+          esac
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.ref }}"
+            case "$base" in
+              main|mentor|mentor-branch)
+                echo "Pull request targets ${base}; homework review stays off."
+                exit 0
+                ;;
+            esac
+            number="${{ github.event.pull_request.number }}"
+          else
+            number=$(gh pr list --head "$BRANCH" --state open \
+              --json number,baseRefName \
+              --jq '[.[] | select(.baseRefName != "main" and .baseRefName != "mentor" and .baseRefName != "mentor-branch")][0].number')
+            if [ -z "$number" ] || [ "$number" = "null" ]; then
+              ahead=$(gh api "repos/${GITHUB_REPOSITORY}/compare/main...${BRANCH}" --jq '.ahead_by')
+              if [ "$ahead" = "0" ]; then
+                echo "Branch ${BRANCH} has no commits ahead of main."
+                exit 0
+              fi
+              review_branch="review/${BRANCH}"
+              if ! gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${review_branch}" --silent >/dev/null 2>&1; then
+                sha=$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')
+                gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+                  -f ref="refs/heads/${review_branch}" \
+                  -f sha="$sha" \
+                  --silent
+              fi
+              if ! number=$(jq -n \
+                --arg title "Homework: ${BRANCH}" \
+                --arg head "$BRANCH" \
+                --arg base "$review_branch" \
+                --arg body "Opened automatically because this branch was pushed without a pull request. The base is ${review_branch}, not main. Copilot reviews the homework here. Do not merge it." \
+                '{title:$title, head:$head, base:$base, draft:true, body:$body}' \
+                | gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls" --input - --jq '.number'); then
+                echo "GitHub Actions is not allowed to open pull requests in this repository."
+                echo "An admin must enable Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests."
+                exit 1
+              fi
+            fi
+          fi
+
+          gh api --method POST \
+            "repos/${GITHUB_REPOSITORY}/pulls/${number}/requested_reviewers" \
+            -f "reviewers[]=copilot-pull-request-reviewer[bot]" \
+            --silent || true

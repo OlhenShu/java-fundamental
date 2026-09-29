@@ -151,9 +151,10 @@ src/test/java/com/softserve/academy/module4/ConditionTaskTest.java
 2. Покладіть домашку в `moduleN` цієї теми, як описано в розділі [Папки домашніх робіт](#папки-домашніх-робіт)
 3. Закомітьте зміни (`git commit -m 'Add module 4 solution'`)
 4. Запуште гілку (`git push -u origin your_name`)
-5. Відкрийте pull request у `main`
 
-Copilot перевіряє pull request за правилами з `.github`. Ментор вмикає це один раз на GitHub: **Settings → Copilot → Code review → Automatic code review**, і має бути увімкнено **Use custom instructions when reviewing pull requests**.
+У `main` не пуште і pull request туди не відкривайте. Якщо відкриваєте pull request, його база — ваша гілка `your_name`. Якщо лише пушите, `.github/workflows/homework-review.yml` відкриває чернетку в гілку `review/your_name`, не в `main`. Copilot перевіряє цю чернетку. Її не мерджте. Гілки `main`, `mentor` і `mentor-branch` не перевіряються.
+
+Адмін репозиторію вмикає це один раз: **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 
 ---
 > **Примітка**: усі команди вище можна виконувати з термінала IDE (IntelliJ IDEA або Eclipse). ✨
@@ -303,9 +304,10 @@ This project uses JUnit 6 for testing. To run the tests:
 2. Put the homework in `moduleN` for that topic, as described in [Homework Folders](#homework-folders)
 3. Commit your changes (`git commit -m 'Add module 4 solution'`)
 4. Push the branch (`git push -u origin your_name`)
-5. Open a pull request into `main`
 
-Copilot reviews the pull request with the rules in `.github`. On GitHub, a maintainer turns this on once: **Settings → Copilot → Code review → Automatic code review**, with **Use custom instructions when reviewing pull requests** enabled.
+Do not push to `main` and do not open a pull request into `main`. If you open a pull request, its base is your branch, `your_name`. If you only push, `.github/workflows/homework-review.yml` opens a draft into `review/your_name`, not into `main`. Copilot reviews that draft. Do not merge it. `main`, `mentor`, and `mentor-branch` are not reviewed.
+
+A repository admin enables this once: **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 
 ---
 > **Note**: All the commands above can be run directly from the terminal in your IDE (IntelliJ IDEA or Eclipse) for convenience. ✨
