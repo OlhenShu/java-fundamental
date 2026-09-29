@@ -64,7 +64,7 @@ jobs:
                 --arg head "$BRANCH" \
                 --arg base "$review_branch" \
                 --arg body "Opened automatically because this branch was pushed without a pull request. The base is ${review_branch}, not main. Copilot reviews the homework here. Do not merge it." \
-                '{title:$title, head:$head, base:$base, draft:true, body:$body}' \
+                '{title:$title, head:$head, base:$base, draft:false, body:$body}' \
                 | gh api --method POST "repos/${GITHUB_REPOSITORY}/pulls" --input - --jq '.number'); then
                 echo "GitHub Actions is not allowed to open pull requests in this repository."
                 echo "An admin must enable Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests."
@@ -73,7 +73,7 @@ jobs:
             fi
           fi
 
-          gh api --method POST \
-            "repos/${GITHUB_REPOSITORY}/pulls/${number}/requested_reviewers" \
-            -f "reviewers[]=copilot-pull-request-reviewer[bot]" \
-            --silent || true
+          if gh pr view "$number" --json isDraft --jq '.isDraft' | grep -qx true; then
+            gh pr ready "$number"
+          fi
+          gh pr edit "$number" --add-reviewer @copilot
