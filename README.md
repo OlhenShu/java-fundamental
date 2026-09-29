@@ -2,7 +2,7 @@
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 [![Maven](https://img.shields.io/badge/Maven-3.9.5-blue.svg)](https://maven.apache.org/)
-[![JUnit](https://img.shields.io/badge/JUnit-5.11.4-green.svg)](https://junit.org/junit5/)
+[![JUnit](https://img.shields.io/badge/JUnit-6.1.3-green.svg)](https://docs.junit.org/6.1.3/overview.html))
 
 This is the repository for the **UA-<group_number>-Java-Fundamentals** group, created for completing homework and practical tasks for the "Java Fundamentals" course. The course is designed to teach basic Java programming concepts that are essential for further development in the field of software engineering.
 
