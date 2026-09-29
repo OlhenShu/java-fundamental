@@ -1,5 +1,7 @@
 # Homework review
 
+Do not review a pull request when the head branch or the base branch is `mentor` or `mentor-branch`. Leave no comments and do not request changes. Those branches hold mentor examples and stay without homework checks.
+
 This is a Java fundamentals course. Review only the homework in the changed files.
 
 The module number is the `moduleN` directory under `src/main/java/com/softserve/academy/` and the same directory under `src/test/java/com/softserve/academy/`. `N` is the topic number from the README, from `module1` through `module17`.

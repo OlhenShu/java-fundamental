@@ -96,7 +96,7 @@ src/test/java/com/softserve/academy/module4/ConditionTaskTest.java
 ### Гілки репозиторію
 
 - `main` – шаблон, від якого створюють нові гілки
-- `mentor-branch` – приклади з занять
+- `mentor-branch` – приклади з занять. Гілки `mentor` і `mentor-branch` Copilot не перевіряє
 - `your_name` – особиста гілка студента (замість `your_name` підставте своє ім'я, наприклад `olha_shevchenko`)
 
 ### Початок роботи
@@ -248,7 +248,7 @@ Leave the `.github` directory unchanged. Create your branch from the latest `mai
 ### Repository Branches
 
 - `main` – template for creating new branches
-- `mentor-branch` – examples from training sessions
+- `mentor-branch` – examples from training sessions. Copilot does not review the `mentor` or `mentor-branch` branches
 - `your_name` – individual student branches (replace `your_name` with your name, for example `olha_shevchenko`)
 
 ### Getting Started

@@ -1,0 +1,25 @@
+name: Skip Copilot review for mentor
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize, review_requested]
+
+jobs:
+  skip:
+    if: >
+      github.head_ref == 'mentor' ||
+      github.head_ref == 'mentor-branch' ||
+      github.base_ref == 'mentor' ||
+      github.base_ref == 'mentor-branch'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Remove Copilot from reviewers
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method DELETE \
+            "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers" \
+            -f "reviewers[]=copilot-pull-request-reviewer[bot]" \
+            --silent || true
